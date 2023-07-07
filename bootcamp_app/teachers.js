@@ -16,10 +16,12 @@ pool.query(`
     JOIN assistance_requests ON teacher_id = teachers.id
     JOIN students ON student_id = students.id
     JOIN cohorts ON cohort_id = cohorts.id
-  WHERE cohorts.name = '${cohortName}'
+  WHERE cohorts.name LIKE $1
   GROUP BY cohort, teacher
   ORDER BY teacher;
-`)
+  `,
+  [`${cohortName}`]
+)
   .then(res => {
     res.rows.forEach(user => {
       console.log(`${user.cohort}: ${user.teacher}`);
